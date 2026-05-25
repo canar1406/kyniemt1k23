@@ -158,7 +158,15 @@ function triggerRomanticTransformation() {
         document.getElementById('netflix-gate-zone').classList.add('hidden');
         
         // Cập nhật lời chúc riêng
-        const newWish = `Hong biết viết gì nữa. Nhưng mà tích cực lên nha, tui biết trong giai đoạn này có rất nhiều áp lực từ những cuộc thi nhưng mà nhớ là phải tích cực lên nha, với tui nghĩ mấy tài liệu tui gửi nhớ xem qua nha thiệt ra là lựa kỷ lắm mới gửi, nên có gì xem qua chắc là sẽ dùng tới đó. Với tui cũng biết dạo này thi cử áp lực cũng nhiều lỡ hôm nào mệt quá mà tui có vô tình gửi tài liệu hay gì đó thì cho tui xin lỗi tại không biết :( nếu có vậy thiệt thì nhớ nói để tui ko gửi nữa. Với thật sự hy vọng là có thể giúp gì đó thôi chứ cũng không có dám có 'tư tâm' nên là nếu coi thấy oke thì dùng nha. Nếu hôm nào mệt quá có thể nghe nhạc hoặc cần người tâm sự thì.... cũng không dám nói là có thể.. tâm sự hay giúp được gì nhưng mà nếu thật sự không tìm được người nào khác thì tui vẫn sẵn lòng ngồi nghe. Cuối cùng thì đừng áp lực bản thân quá dù sắp tới có nhiều cuộc thi nhưng cố lên nha.<br><br><span style="font-size: 1.1rem; font-weight: 700; display: block; text-align: right; margin-top: 15px; text-shadow: none; color: #fff;">- HeaVN</span>`;
+        const newWish = `<div style="line-height: 1.6; font-size: clamp(0.9rem, 4vw, 1.1rem); text-align: justify; padding: 0 10px; overflow-y: auto; max-height: 55vh; display: flex; flex-direction: column; gap: 12px; margin-bottom: 10px;">
+            <p style="margin: 0;">Hong biết viết gì nữa. Nhưng mà tích cực lên nha, tui biết trong giai đoạn này có rất nhiều áp lực từ những cuộc thi nhưng mà nhớ là phải tích cực lên nha.</p>
+            <p style="margin: 0;">Với tui nghĩ mấy tài liệu tui gửi nhớ xem qua nha, thiệt ra là lựa kỹ lắm mới gửi, nên có gì xem qua chắc là sẽ dùng tới đó.</p>
+            <p style="margin: 0;">Với tui cũng biết dạo này thi cử áp lực cũng nhiều, lỡ hôm nào mệt quá mà tui có vô tình gửi tài liệu hay gì đó thì cho tui xin lỗi tại không biết :( Nếu có vậy thiệt thì nhớ nói để tui không gửi nữa.</p>
+            <p style="margin: 0;">Với thật sự hy vọng là có thể giúp gì đó thôi chứ cũng không có dám có 'tư tâm' nên là nếu coi thấy oke thì dùng nha.</p>
+            <p style="margin: 0;">Nếu hôm nào mệt quá có thể nghe nhạc hoặc cần người tâm sự thì.... cũng không dám nói là có thể.. tâm sự hay giúp được gì nhưng mà nếu thật sự không tìm được người nào khác thì tui vẫn sẵn lòng ngồi nghe.</p>
+            <p style="margin: 0;">Cuối cùng thì đừng áp lực bản thân quá dù sắp tới có nhiều cuộc thi nhưng cố lên nha.</p>
+        </div>
+        <div style="font-size: 1.1rem; font-weight: 700; text-align: right; color: #fff;">- HeaVN</div>`;
         document.getElementById('user-wish').innerHTML = newWish;
         
         // Kích hoạt hạt rơi trái tim
