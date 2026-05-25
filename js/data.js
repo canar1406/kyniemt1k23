@@ -11,7 +11,7 @@ const QUESTIONS_DATA = [
     "Giơ một ngón tay xuống nếu bạn thấy trong lớp mình có một người khiến bạn rất thoải mái, an tâm khi ở gần", // 8
     "Giơ một ngón tay xuống nếu bạn thấy thứ quý giá nhất bạn nhận được sau 3 năm không phải là kiến thức mà là những món quan hệ bạn bè và thầy cô chất lượng", // 9
     "Giơ một ngón tay xuống nếu bạn thấy mình rất là biết ơn khi có những người ban cán sự lớp tuyệt vời như vậy", // 4
-    "Giơ một ngón tay xuống nếu bạn thấy mình muốn cảm ơn các thầy cô trong trường, đặc biệt là thầy trọn", // 7
+    "Giơ một ngón tay xuống nếu bạn thấy mình muốn cảm ơn các thầy cô trong trường, đặc biệt là thầy Trọn", // 7
     "Giơ một ngón tay xuống nếu bạn hãy bỏ một ngón tay xuống nếu nhìn lại, bạn thấy bản thân đã \"lột xác\" thành một con người trưởng thành hơn rất nhiều so với ngày đầu nhập học", // 6
     "Giơ một ngón tay xuống nếu bạn thấy tự hào về bản thân mình vì đã cố gắng hết sức mình.", // 12
     "Giơ một ngón tay xuống nếu bạn vẫn sẽ chọn t1k23 nếu được quay trở lại ngày thi ts10", // 10

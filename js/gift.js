@@ -176,8 +176,9 @@ function triggerRomanticTransformation() {
         const romanticZone = document.getElementById('romantic-zone');
         romanticZone.classList.remove('hidden');
         romanticZone.innerHTML = `
-            <div class="secret-voucher-text">
-                ${currentUser.voucher}
+            <div style="margin-top: 20px; background: rgba(255, 255, 255, 0.95); padding: 20px 15px; border-radius: 12px; border: 2px dashed #e55039; position: relative; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+                <div style="position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #e55039; color: white; padding: 4px 15px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; white-space: nowrap; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">🎁 VOUCHER DÀNH CHO BẠN 🎁</div>
+                <p style="font-weight: bold; font-size: 1.15rem; color:#e55039; margin: 0; line-height: 1.4; text-align: center;">${currentUser.voucher}</p>
             </div>
         `;
         
