@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>T1K23 Farewell - Thanh Xuân Rực Rỡ</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;800&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/main.css?v=12">
+    <link rel="stylesheet" href="css/animations.css?v=3">
+    <link rel="stylesheet" href="css/glory_text.css?v=3">
+
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+    <!-- Global 3D Background -->
+    <div id="global-galaxy">
+        <div id="galaxy-container"></div>
+        <div id="global-particles" class="perspective-container"></div>
+        <div id="bg-overlay" class="bg-overlay hidden"></div>
+    </div>
+    
+    <!-- Music Player UI -->
+    <div id="music-player-ui" class="music-player">
+        <div id="music-disc" class="music-disc paused"></div>
+        <div class="music-info">
+            <span id="music-track-name">Nhấn để phát nhạc</span>
+        </div>
+    </div>
+
+    <!-- Main Application Container -->
+    <div id="app-container">
+
+    <!-- Intro Stage -->
+    <section id="intro-stage" class="stage active">
+        <div class="intro-content phase-container active">
+            <h1 class="intro-title golden-text text-pop-up-top" style="font-size: clamp(6rem, 1vw, 15rem) !important; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 5px;">Thanh Xuân T1K23</h1>
+            <button id="btn-start" class="btn-primary">Bắt Đầu Hành Trình</button>
+        </div>
+    </section>
+
+    <!-- Game 1 Stage: Giơ một ngón tay xuống -->
+    <section id="game1-stage" class="stage hidden">
+        <div id="game1-container">
+            <div id="game1-background-images"></div>
+            <div class="question-card flashcard-3d">
+                <h2 id="game1-question-text">Giơ một ngón tay xuống nếu...</h2>
+            </div>
+            <p class="instruction-text">Bấm [Click] hoặc phím [Mũi tên phải] để tiếp tục</p>
+        </div>
+    </section>
+
+    <!-- Game 2 Stage: Sự thật trần trụi -->
+    <section id="game2-stage" class="stage">
+        <div id="game2-container">
+            <!-- Intro title -->
+            <div id="game2-intro" class="phase-container">
+                <h1 class="intro-title golden-text" style="font-size: 5rem; text-shadow: 0 10px 30px rgba(0,0,0,0.8);">Sự Thật Trần Trụi Về 12T1</h1>
+            </div>
+
+            <!-- State 1 & 2 -->
+            <div id="state12-container" class="phase-container hidden">
+                <h2 id="fact-text" class="fact-text"></h2>
+                <div id="countdown-number" class="countdown-number hidden">10</div>
+            </div>
+
+            <!-- Removed State 2.5 -->
+
+            <!-- State 3 -->
+            <div id="state3-reveal" class="phase-container hidden">
+                <div id="reveal-sub-images"></div>
+                <img id="reveal-main-image" class="reveal-main-img" src="" alt="Main">
+                <h2 id="reveal-name" class="reveal-name-text"></h2>
+                <h3 id="reveal-title" class="reveal-title-text"></h3>
+                <button id="btn-scan-qr" class="btn-primary" style="margin-top:20px;">Nhận Quà</button>
+            </div>
+
+            <!-- State 4 Modal (Main Screen QR Code) -->
+            <div id="gift-modal" class="modal hidden">
+                <div class="modal-content flashcard-3d" style="text-align: center; padding: 40px;">
+                    <h3 class="golden-text" style="margin-bottom: 10px; font-size: 2.5rem; text-transform: uppercase;">Nhận Quà Của Bạn</h3>
+                    <h4 id="qr-title-text" class="golden-text" style="font-size: 1.5rem; margin-bottom: 25px;"></h4>
+                    
+                    <img id="qr-code-img" src="" alt="QR Code" style="margin: 0 auto 25px; display:block; border-radius:10px; width: 200px; height: 200px; box-shadow: 0 5px 15px rgba(0,0,0,0.5);">
+                    <p style="margin-bottom: 30px; font-size: 1.2rem;">Quét mã QR bằng điện thoại của bạn để nhận phần quà bí mật nhé!</p>
+                    
+                    <button id="btn-next-person" class="btn-primary" style="width: 200px;">Người Tiếp Theo</button>
+                </div>
+            </div>
+
+            <!-- Admin Panel Menu -->
+            <div id="admin-panel" class="admin-panel">
+                <button id="btn-toggle-admin" class="btn-admin-toggle">⚙️ Admin</button>
+                <div id="admin-menu" class="admin-menu hidden">
+                    <h4 style="color:#fff; margin-bottom: 10px; border-bottom: 1px solid #555; padding-bottom: 5px;">Chọn thành viên</h4>
+                    <div id="admin-member-list" class="admin-member-list"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Farewell Stage: Đỗ Khôi -->
+    <section id="farewell-stage" class="stage hidden">
+        <div id="video-overlay" class="video-overlay-container">
+            <button id="btn-show-video" class="btn-glow">Xem Video Chia Tay Đỗ Khôi</button>
+            <video id="khoi-video" src="assets/video/dokhoi_video.mp4" controls class="hidden-video"></video>
+        </div>
+    </section>
+
+    <!-- Audio Manager -->
+    <audio id="bg-music"></audio>
+    <audio id="sfx-explosion" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3" preload="auto"></audio>
+    <audio id="sfx-netflix" src="https://assets.mixkit.co/active_storage/sfx/1206/1206-preview.mp3" preload="auto"></audio>
+
+    <!-- Scripts -->
+    <script src="js/data.js?v=15"></script>
+    <script src="js/background.js?v=10"></script>
+    <script src="js/audio-manager.js?v=6"></script>
+    <script src="js/game1.js?v=12"></script>
+    <script src="js/game2.js?v=13"></script>
+    <script src="js/farewell.js?v=10"></script>
+    <script src="js/app.js?v=6"></script>
+</body>
+</html>

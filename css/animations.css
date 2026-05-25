@@ -1,0 +1,64 @@
+/* animations.css */
+
+/* Tumble float for Game 1 */
+@keyframes tumbleFloat {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    25% { transform: translate(10px, -15px) rotate(5deg); }
+    50% { transform: translate(-5px, 10px) rotate(-5deg); }
+    75% { transform: translate(-15px, -5px) rotate(8deg); }
+    100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+.tumble-float {
+    animation: tumbleFloat 6s infinite ease-in-out;
+}
+
+/* Heartbeat pulse for Countdown */
+@keyframes pulseScale {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+.pulse {
+    animation: pulseScale 1s infinite;
+}
+
+/* Reveal Explosion Image */
+@keyframes revealScale {
+    0% { transform: scale(0); opacity: 0; }
+    60% { transform: scale(1.2); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.reveal-animate-main {
+    animation: revealScale 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes dropDown {
+    0% { transform: translateY(-50px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+.reveal-animate-text {
+    animation: dropDown 0.5s ease-out forwards;
+    animation-delay: 0.5s; /* After main image */
+    opacity: 0;
+}
+
+/* Sub images explosion - using JS to set custom translate variables */
+@keyframes explosion {
+    0% {
+        transform: translate(0, 0) scale(0) rotate(0deg);
+        opacity: 0;
+    }
+    100% {
+        transform: translate(var(--tx), var(--ty)) scale(1) rotate(var(--rot));
+        opacity: 1;
+    }
+}
+
+.reveal-sub-img {
+    animation: explosion 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    /* Added infinite float after explosion via JS */
+}

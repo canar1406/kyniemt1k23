@@ -1,0 +1,22 @@
+/* glory_text.css */
+
+.golden-text {
+    background: linear-gradient(45deg, #FFD700, #FFA500, #FFDF00, #D4AF37);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    text-shadow: 0 0 30px rgba(255,215,0,1);
+    font-weight: 900;
+    font-size: 5.5rem; /* Dự phòng nếu ko có inline */
+    text-transform: uppercase;
+    animation: shine 3s linear infinite;
+    font-family: var(--font-accent);
+}
+
+@keyframes shine {
+    to {
+        background-position: 200% center;
+    }
+}
