@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nhận Quà T1K23 - Thầy Trọn</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;800&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/main.css">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #000;
+            color: #fff;
+            padding: 20px;
+            overflow-x: hidden;
+            font-family: 'Be Vietnam Pro', sans-serif;
+            transition: background 1s ease;
+        }
+        .mobile-container {
+            width: 100%;
+            max-width: 400px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.5s ease;
+        }
+        .input-group {
+            margin: 20px 0;
+        }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 15px;
+            border-radius: 10px;
+            border: none;
+            outline: none;
+            font-size: 1.1rem;
+            text-align: center;
+            margin-bottom: 15px;
+            font-family: inherit;
+        }
+        button {
+            width: 100%;
+        }
+        .hidden {
+            display: none !important;
+        }
+    </style>
+
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+<body id="gift-body">
+
+    <!-- GATEKEEPER: Chặn mọi thông tin -->
+    <div class="mobile-container" id="gatekeeper-wrapper">
+        <h3 class="golden-text" style="font-size: 1.5rem; margin-bottom: 20px;">Xác Nhận Danh Tính</h3>
+        <p style="margin-bottom: 20px; font-size: 1rem; opacity: 0.8;">Để nhận quà, vui lòng nhập bất kỳ ngày nào cũng được!</p>
+        
+        <div class="input-group">
+            <input type="text" id="verify-birthday" placeholder="Ngày sinh bất kỳ (Ví dụ: 01/01)">
+            <button id="btn-verify-bday" class="btn-primary">Mở Hộp Quà</button>
+        </div>
+    </div>
+
+    <!-- GIFT CONTENT: Hiện sau khi Gatekeeper thông qua -->
+    <div class="mobile-container hidden" id="gift-content-wrapper">
+        <h2 id="user-name" style="margin-bottom: 5px; font-size: 1.5rem;"></h2>
+        <h3 id="user-nickname" class="golden-text" style="font-size: 1.2rem; margin-bottom: 20px;"></h3>
+        
+        <p id="user-wish" style="font-style: italic; opacity: 0.9; margin-bottom: 20px;"></p>
+        
+        <!-- NORMAL VOUCHER -->
+        <div id="normal-voucher-zone" class="hidden" style="margin-bottom: 20px; background: rgba(255, 255, 255, 0.95); padding: 20px 15px; border-radius: 12px; border: 2px dashed #e55039; position: relative; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+            <div style="position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #e55039; color: white; padding: 4px 15px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; white-space: nowrap; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">🎁 VOUCHER DÀNH CHO BẠN 🎁</div>
+            <p id="voucher-code" style="font-weight: bold; font-size: 1.15rem; color:#e55039; margin: 0; line-height: 1.4;"></p>
+        </div>
+        
+        <!-- MÔ TẢ DỊCH VỤ -->
+        <div id="heavietnam-services" style="font-size: 0.85rem; color: #ccc; margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 15px;"></div>
+    </div>
+
+    <!-- Audio -->
+    <audio id="gift-bgm" preload="auto" loop></audio>
+
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script src="js/gift_thay.js?v=1"></script>
+</body>
+</html>

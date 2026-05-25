@@ -263,6 +263,11 @@ class Game2 {
         // Luôn trỏ link QR về Github Pages để điện thoại có thể truy cập được từ bất cứ đâu
         let giftUrl = 'https://canar1406.github.io/kyniemt1k23/gift.html';
         
+        // Nếu là Thầy Trọn (id: 1), đổi sang trang nhận quà đặc biệt của Thầy
+        if (member.id === 1) {
+            giftUrl = 'https://canar1406.github.io/kyniemt1k23/gift_thay.html';
+        }
+        
         // Show QR
         this.qrCodeImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(giftUrl)}`;
     }
