@@ -3,7 +3,7 @@
     --bg-gradient: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
     --text-primary: #2d3436;
     --font-main: 'Be Vietnam Pro', sans-serif;
-    --font-accent: 'Great Vibes', cursive;
+    --font-accent: 'Dancing Script', cursive;
 }
 
 * {
@@ -622,3 +622,179 @@ body {
 
 /* (Đã remove) */
 
+
+/* ------------------------------------- */
+/* AUDIO ADMIN PANEL */
+/* ------------------------------------- */
+.audio-admin-panel {
+    position: fixed;
+    top: 70px;
+    right: 20px;
+    width: 320px;
+    background: rgba(15, 15, 20, 0.95);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 15px;
+    padding: 20px;
+    color: #fff;
+    z-index: 1001;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+    backdrop-filter: blur(15px);
+    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    transform-origin: top right;
+}
+
+.audio-admin-panel.hidden {
+    opacity: 0;
+    transform: scale(0.9) translateY(-20px);
+    pointer-events: none;
+}
+
+.audio-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+}
+
+.audio-panel-header h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.btn-close {
+    background: none;
+    border: none;
+    color: #ccc;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.btn-close:hover {
+    color: #fff;
+}
+
+.audio-controls {
+    margin-bottom: 20px;
+}
+
+.control-group {
+    margin-bottom: 15px;
+}
+
+.control-group label {
+    display: block;
+    font-size: 0.9rem;
+    color: #aaa;
+    margin-bottom: 8px;
+}
+
+.slider-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.vol-icon {
+    font-size: 1.2rem;
+}
+
+.vol-val {
+    font-size: 0.85rem;
+    font-weight: 600;
+    width: 40px;
+    text-align: right;
+}
+
+input[type=range] {
+    -webkit-appearance: none;
+    width: 100%;
+    background: transparent;
+}
+
+input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    background: #ffd700;
+    cursor: pointer;
+    margin-top: -6px;
+    box-shadow: 0 0 10px rgba(255,215,0,0.5);
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 4px;
+    cursor: pointer;
+    background: rgba(255,255,255,0.2);
+    border-radius: 2px;
+}
+
+.audio-playlist h5 {
+    font-size: 0.95rem;
+    color: #aaa;
+    margin-bottom: 10px;
+}
+
+.playlist-container {
+    max-height: 200px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding-right: 5px;
+}
+
+.playlist-container::-webkit-scrollbar {
+    width: 4px;
+}
+.playlist-container::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.2);
+    border-radius: 2px;
+}
+
+.playlist-item {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid transparent;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    text-align: left;
+    color: #ddd;
+    transition: all 0.2s;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex-shrink: 0; /* KHÔNG CHO PHÉP FLEXBOX BÓP MÉO CHIỀU CAO */
+    line-height: 1.5;
+}
+
+.playlist-item:hover {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+}
+
+.playlist-item.active {
+    background: rgba(255, 215, 0, 0.15);
+    border-color: rgba(255, 215, 0, 0.5);
+    color: #ffd700;
+    font-weight: 600;
+}
+
+.btn-audio-settings {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    margin-left: 10px;
+    transition: transform 0.2s;
+    filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5));
+}
+
+.btn-audio-settings:hover {
+    transform: scale(1.1) rotate(15deg);
+}

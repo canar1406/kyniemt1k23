@@ -21,6 +21,11 @@ class AudioManager {
         this.isPlaying = false;
 
         this.bgMusic.addEventListener('ended', () => this.playNextTrack());
+        this.baseMusicVolume = 1.0; // Lưu mức âm lượng gốc để dùng cho fade
+        this.videoVolume = 1.0;
+
+        // BIND UI
+        this.bindAudioAdminPanel();
 
         // Bind Music Player UI
         const playerUi = document.getElementById('music-player-ui');
@@ -45,6 +50,85 @@ class AudioManager {
         }
     }
 
+    bindAudioAdminPanel() {
+        this.btnSettings = document.getElementById('btn-audio-settings');
+        this.audioPanel = document.getElementById('audio-admin-panel');
+        this.btnClosePanel = document.getElementById('btn-close-audio-panel');
+        this.musicSlider = document.getElementById('music-vol-slider');
+        this.videoSlider = document.getElementById('video-vol-slider');
+        this.musicVolVal = document.getElementById('music-vol-val');
+        this.videoVolVal = document.getElementById('video-vol-val');
+        this.playlistContainer = document.getElementById('audio-playlist-container');
+
+        if (!this.audioPanel) return;
+
+        // Toggle Panel
+        if (this.btnSettings) {
+            this.btnSettings.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.audioPanel.classList.toggle('hidden');
+            });
+        }
+        if (this.btnClosePanel) {
+            this.btnClosePanel.addEventListener('click', () => {
+                this.audioPanel.classList.add('hidden');
+            });
+        }
+
+        // Sliders
+        if (this.musicSlider) {
+            this.musicSlider.addEventListener('input', (e) => {
+                this.baseMusicVolume = parseFloat(e.target.value);
+                this.bgMusic.volume = this.baseMusicVolume;
+                this.musicVolVal.innerText = `${Math.round(this.baseMusicVolume * 100)}%`;
+            });
+        }
+
+        if (this.videoSlider) {
+            this.videoSlider.addEventListener('input', (e) => {
+                this.videoVolume = parseFloat(e.target.value);
+                this.videoVolVal.innerText = `${Math.round(this.videoVolume * 100)}%`;
+                // Nếu video đang phát, update ngay lập tức
+                const videoElement = document.getElementById('khoi-video');
+                if (videoElement) {
+                    videoElement.volume = this.videoVolume;
+                }
+            });
+        }
+
+        // Render Playlist
+        if (this.playlistContainer) {
+            this.playlistContainer.innerHTML = '';
+            this.playlist.forEach((src, index) => {
+                const item = document.createElement('div');
+                item.className = 'playlist-item';
+                let name = src.split('/').pop().replace('.mp3', '').replaceAll('_', ' ');
+                // Xóa số ở đầu chuỗi (VD: "1 Cam On..." -> "Cam On...")
+                name = name.replace(/^\d+\s*/, '');
+                name = name.replace(/\b\w/g, l => l.toUpperCase());
+                item.innerText = `${index + 1}. ${name}`;
+                
+                item.addEventListener('click', () => {
+                    this.playTrack(index);
+                });
+                
+                this.playlistContainer.appendChild(item);
+            });
+        }
+    }
+
+    updatePlaylistUI() {
+        if (!this.playlistContainer) return;
+        const items = this.playlistContainer.querySelectorAll('.playlist-item');
+        items.forEach((item, index) => {
+            if (index === this.currentTrackIndex) {
+                item.classList.add('active');
+            } else {
+                item.classList.remove('active');
+            }
+        });
+    }
+
     start() {
         if (this.isPlaying) return;
         this.playTrack(0);
@@ -55,13 +139,14 @@ class AudioManager {
         this.currentTrackIndex = index;
         this.bgMusic.src = this.playlist[this.currentTrackIndex];
         this.bgMusic.load();
+        this.bgMusic.volume = this.baseMusicVolume;
         this.bgMusic.play().catch(e => console.log("Audio autoplay prevented", e));
-        this.bgMusic.volume = 1.0;
 
         // Update UI
         const trackNameUi = document.getElementById('music-track-name');
         if (trackNameUi) {
             let name = this.playlist[this.currentTrackIndex].split('/').pop().replace('.mp3', '').replaceAll('_', ' ');
+            name = name.replace(/^\d+\s*/, ''); // Xóa số đếm ở đầu file name
             // capitalize
             name = name.replace(/\b\w/g, l => l.toUpperCase());
             trackNameUi.innerText = name;
@@ -71,6 +156,7 @@ class AudioManager {
             disc.classList.add('spinning');
             disc.classList.remove('paused');
         }
+        this.updatePlaylistUI();
     }
 
     playNextTrack() {
@@ -78,7 +164,9 @@ class AudioManager {
         this.playTrack(nextIndex);
     }
 
-    fadeAudio(targetVolume, durationMs) {
+    fadeAudio(targetRatio, durationMs) {
+        // targetRatio là tỷ lệ so với baseMusicVolume (VD: 0.2 nghĩa là giảm xuống còn 20% của base)
+        const targetVolume = this.baseMusicVolume * targetRatio;
         const startVolume = this.bgMusic.volume;
         const diff = targetVolume - startVolume;
         const steps = 20;

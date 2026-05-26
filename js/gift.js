@@ -60,7 +60,17 @@ function verifyBirthday() {
 
         // Đúng sinh nhật -> Ẩn Gatekeeper, Mở Hộp quà
         document.getElementById('gatekeeper-wrapper').classList.add('hidden');
-        document.getElementById('gift-content-wrapper').classList.remove('hidden');
+        const giftWrapper = document.getElementById('gift-content-wrapper');
+        giftWrapper.classList.remove('hidden');
+        
+        if (typeof gsap !== 'undefined') {
+            gsap.from(giftWrapper, {
+                scale: 0.8,
+                opacity: 0,
+                duration: 1,
+                ease: "back.out(1.7)"
+            });
+        }
         
         // Render thông tin chung
         renderCommonInfo(currentUser);
@@ -154,6 +164,28 @@ function triggerRomanticTransformation() {
         wrapper.classList.add('romantic-pink-card');
         wrapper.style.opacity = 1;
         
+        if (typeof gsap !== 'undefined') {
+            gsap.from(wrapper, {
+                y: 100,
+                scale: 0.5,
+                rotationY: -180, // Lật 3D lật bài
+                opacity: 0,
+                duration: 1.5,
+                ease: "elastic.out(1, 0.5)"
+            });
+
+            // Hiệu ứng đập nhịp nhàng phát sáng cho toàn bộ khu vực text
+            gsap.to(['#user-name', '#user-nickname', '#user-wish'], {
+                scale: 1.02,
+                textShadow: "0 0 15px #ff4757, 0 0 30px #e84393",
+                repeat: -1,
+                yoyo: true,
+                duration: 0.8,
+                stagger: 0.1,
+                ease: "sine.inOut"
+            });
+        }
+        
         // Ẩn Gate Netflix
         document.getElementById('netflix-gate-zone').classList.add('hidden');
         
@@ -191,36 +223,47 @@ function triggerRomanticTransformation() {
     }, 450); // Chuyển cảnh nhanh chóng và mượt mà hơn (450ms thay vì 2500ms)
 }
 
-// Hiệu ứng rơi ngôi sao / icon cho Ánh Ngọc
 function startFallingIcons() {
     const icons = ['💖', '✨', '🌸', '💫', '⭐', '🐱', '🐈', '😻', '😽'];
     setInterval(() => {
         const el = document.createElement('div');
         el.innerText = icons[Math.floor(Math.random() * icons.length)];
         el.style.position = 'fixed';
-        el.style.left = Math.random() * 100 + 'vw';
-        el.style.top = '-50px';
-        el.style.fontSize = (Math.random() * 20 + 15) + 'px';
-        el.style.opacity = Math.random() * 0.5 + 0.5;
+        // Phun từ chính giữa dưới cùng màn hình (suối phun)
+        el.style.left = '50vw';
+        el.style.top = '100vh';
+        el.style.fontSize = (Math.random() * 20 + 20) + 'px';
+        el.style.opacity = 1;
         el.style.zIndex = '1';
         el.style.pointerEvents = 'none';
         
-        // Animation
-        const duration = Math.random() * 3000 + 3000;
-        el.animate([
-            { transform: `translateY(0) rotate(0deg)` },
-            { transform: `translateY(110vh) rotate(${Math.random() * 360}deg)` }
-        ], {
-            duration: duration,
-            easing: 'linear'
-        });
-        
         document.body.appendChild(el);
         
-        setTimeout(() => {
-            el.remove();
-        }, duration);
-    }, 300);
+        const durationSec = Math.random() * 2 + 2;
+        
+        if (typeof gsap !== 'undefined') {
+            gsap.to(el, {
+                y: -(window.innerHeight + 100),
+                x: (Math.random() - 0.5) * window.innerWidth, // Bay tỏa ra 2 bên
+                rotation: Math.random() * 720 - 360,
+                scale: Math.random() * 1.5 + 0.5,
+                opacity: 0, // Mờ dần khi lên cao
+                duration: durationSec,
+                ease: "power2.out", // Bắn mạnh lúc đầu, chậm dần
+                onComplete: () => el.remove()
+            });
+        } else {
+            // Fallback
+            el.animate([
+                { transform: `translate(0, 0) rotate(0deg)`, opacity: 1 },
+                { transform: `translate(${(Math.random()-0.5)*500}px, -110vh) rotate(${Math.random() * 360}deg)`, opacity: 0 }
+            ], {
+                duration: durationSec * 1000,
+                easing: 'ease-out'
+            });
+            setTimeout(() => el.remove(), durationSec * 1000);
+        }
+    }, 150); // Phun nhanh hơn (150ms thay vì 300ms)
 }
 
 function triggerConfetti() {

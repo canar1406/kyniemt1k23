@@ -52,7 +52,17 @@ function verifyBirthday() {
 
         // Đúng sinh nhật -> Ẩn Gatekeeper, Mở Hộp quà
         document.getElementById('gatekeeper-wrapper').classList.add('hidden');
-        document.getElementById('gift-content-wrapper').classList.remove('hidden');
+        const giftWrapper = document.getElementById('gift-content-wrapper');
+        giftWrapper.classList.remove('hidden');
+        
+        if (typeof gsap !== 'undefined') {
+            gsap.from(giftWrapper, {
+                scale: 0.8,
+                opacity: 0,
+                duration: 1,
+                ease: "back.out(1.7)"
+            });
+        }
         
         // Render thông tin chung
         renderCommonInfo(currentUser);

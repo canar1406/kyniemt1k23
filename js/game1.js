@@ -9,6 +9,43 @@ class Game1 {
         this.currentIndex = 0;
         this.questions = QUESTIONS_DATA;
         this.isTransitioning = false;
+
+        // Admin Panel
+        this.btnToggleAdmin = document.getElementById('btn-toggle-admin-game1');
+        this.adminPanel = document.getElementById('game1-admin-panel');
+        this.adminList = document.getElementById('game1-admin-list');
+
+        if (this.btnToggleAdmin) {
+            this.btnToggleAdmin.addEventListener('click', (e) => {
+                e.stopPropagation(); // Ngăn click lan ra container làm đổi câu hỏi
+                this.adminPanel.classList.toggle('open');
+            });
+        }
+        this.buildAdminMenu();
+    }
+
+    buildAdminMenu() {
+        if (!this.adminList) return;
+        this.adminList.innerHTML = '';
+        this.questions.forEach((q, index) => {
+            const btn = document.createElement('button');
+            btn.innerText = `Câu ${index + 1}`;
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.adminPanel.classList.remove('open');
+                this.jumpToQuestion(index);
+            });
+            this.adminList.appendChild(btn);
+        });
+    }
+
+    updateAdminMenu() {
+        if (!this.adminList) return;
+        const buttons = this.adminList.querySelectorAll('button');
+        buttons.forEach((btn, index) => {
+            if (index === this.currentIndex) btn.classList.add('active');
+            else btn.classList.remove('active');
+        });
     }
 
     start() {
@@ -24,6 +61,7 @@ class Game1 {
         
         this.renderFloatImages();
         this.questionText.innerText = this.questions[this.currentIndex];
+        this.updateAdminMenu();
         
         // Setup event listener
         this.handleKeyDown = (e) => {
@@ -43,6 +81,49 @@ class Game1 {
         this.container.removeEventListener('click', this.handleClick);
     }
 
+    startAtLast() {
+        this.start();
+        this.currentIndex = this.questions.length - 1;
+        this.questionText.innerText = this.questions[this.currentIndex];
+        this.updateAdminMenu();
+    }
+
+    jumpToQuestion(index) {
+        if (this.isTransitioning || index === this.currentIndex) return;
+        this.currentIndex = index;
+        this.updateAdminMenu();
+
+        this.isTransitioning = true;
+
+        this.questionCard.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+        this.questionCard.style.opacity = 0;
+        this.questionCard.style.transform = 'scale(0.9)';
+        
+        this.bgImagesContainer.style.transition = 'opacity 0.6s ease-out';
+        this.bgImagesContainer.style.opacity = 0;
+        
+        setTimeout(() => {
+            this.questionText.innerText = this.questions[this.currentIndex];
+            this.renderFloatImages();
+            
+            this.questionCard.style.transition = 'none';
+            this.questionCard.style.transform = 'scale(1.1)';
+            void this.questionCard.offsetWidth;
+            
+            this.questionCard.style.transition = 'opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1)';
+            this.questionCard.style.opacity = 1;
+            this.questionCard.style.transform = 'scale(1)';
+            
+            this.bgImagesContainer.style.transition = 'opacity 0.8s ease-out';
+            this.bgImagesContainer.style.opacity = 1;
+            
+            setTimeout(() => {
+                this.isTransitioning = false;
+            }, 800);
+            
+        }, 600);
+    }
+
     nextQuestion() {
         if (this.isTransitioning) return;
         this.currentIndex++;
@@ -54,6 +135,7 @@ class Game1 {
         }
 
         this.isTransitioning = true;
+        this.updateAdminMenu();
 
         // Fade out both the CARD and the BACKGROUND IMAGES
         this.questionCard.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
@@ -93,10 +175,17 @@ class Game1 {
     }
 
     prevQuestion() {
-        if (this.isTransitioning || this.currentIndex <= 0) return;
-        this.currentIndex--;
+        if (this.isTransitioning) return;
         
+        if (this.currentIndex <= 0) {
+            this.stop();
+            app.goToStage('intro-stage');
+            return;
+        }
+
+        this.currentIndex--;
         this.isTransitioning = true;
+        this.updateAdminMenu();
 
         // Fade out both the CARD and the BACKGROUND IMAGES
         this.questionCard.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';

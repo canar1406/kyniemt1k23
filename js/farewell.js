@@ -9,7 +9,7 @@ class FarewellManager {
         this.btnShowVideo = document.getElementById('btn-show-video');
         
         this.isKhoiMode = false;
-        this.maxParticles = 80;
+        this.maxParticles = 150;
         this.spawnIntervalId = null;
 
         // Data mặc định
@@ -31,6 +31,17 @@ class FarewellManager {
                 this.hideVideo();
             });
         }
+
+        this.handleKeyDown = (e) => {
+            if (app.currentStage !== 'farewell-stage') return;
+            if (e.key === 'ArrowLeft') {
+                app.goToStage('game2-stage');
+                if (typeof game2 !== 'undefined') {
+                    game2.startAtLast();
+                }
+            }
+        };
+        document.addEventListener('keydown', this.handleKeyDown);
     }
 
     getRandomInRange(min, max) {
@@ -71,7 +82,7 @@ class FarewellManager {
 
         // Bắt đầu spawn hạt Khôi ngay (dùng CÙNG kiểu animation với background.js)
         clearInterval(this.spawnIntervalId);
-        this.spawnIntervalId = setInterval(() => this.createKhoiParticle(), 400);
+        this.spawnIntervalId = setInterval(() => this.createKhoiParticle(), 100);
     }
 
     createKhoiParticle() {
@@ -122,43 +133,46 @@ class FarewellManager {
 
         const initialY = -150;
         const finalY = window.innerHeight + 150;
-        const duration = this.getRandomInRange(10000, 20000); // 10-20s
-        const rotation = this.getRandomInRange(-30, 30);
+        const durationSec = this.getRandomInRange(10, 20); // GSAP uses seconds
+        
+        // Simple 2D rotation like main page
+        const rot2D = this.getRandomInRange(-30, 30);
 
         particle.style.left = `${xPos}%`;
         particle.style.opacity = 0;
-        particle.style.transform = `translateY(${initialY}px) translateZ(${zPos}px) rotate(${rotation}deg)`;
 
         this.galaxyContainer.appendChild(particle);
 
-        // requestAnimationFrame loop - Y HỆT background.js
-        let startTime = null;
+        if (typeof gsap !== 'undefined') {
+            // Set initial state
+            gsap.set(particle, {
+                y: initialY,
+                z: zPos,
+                rotation: rot2D
+            });
 
-        const animateParticle = (timestamp) => {
-            if (!startTime) startTime = timestamp;
-            const progress = timestamp - startTime;
-            let fraction = progress / duration;
-            fraction = Math.min(fraction, 1);
+            // GSAP Timeline cho fade in, falling (cùng lúc fade out ở cuối)
+            const tl = gsap.timeline({
+                onComplete: () => {
+                    if (particle.parentNode) particle.parentNode.removeChild(particle);
+                }
+            });
 
-            if (fraction < 1) {
-                const currentY = initialY + (finalY - initialY) * fraction;
-                particle.style.transform = `translateY(${currentY}px) translateZ(${zPos}px) rotate(${rotation}deg)`;
-                
-                if (fraction < 0.1) {
-                    particle.style.opacity = fraction * 10;
-                } else if (fraction > 0.9) {
-                    particle.style.opacity = (1 - fraction) * 10;
-                } else {
-                    particle.style.opacity = 1;
-                }
-                requestAnimationFrame(animateParticle);
-            } else {
-                if (particle.parentNode) {
-                    particle.parentNode.removeChild(particle);
-                }
-            }
-        };
-        requestAnimationFrame(animateParticle);
+            tl.to(particle, { opacity: 1, duration: durationSec * 0.1, ease: "power1.inOut" })
+              .to(particle, { opacity: 0, duration: durationSec * 0.1, ease: "power1.inOut" }, `+=${durationSec * 0.8}`);
+            
+            // Chuyển động Y liên tục
+            gsap.to(particle, {
+                y: finalY,
+                duration: durationSec,
+                ease: "none"
+            });
+        } else {
+            // Fallback tĩnh nếu GSAP lỗi
+            particle.style.opacity = 1;
+            particle.style.transform = `translateY(100px)`;
+            setTimeout(() => { if (particle.parentNode) particle.parentNode.removeChild(particle); }, 5000);
+        }
     }
 
     showVideo() {
@@ -174,8 +188,19 @@ class FarewellManager {
 
         setTimeout(() => {
             if(this.khoiVideo) {
+                if (typeof audioManager !== 'undefined') {
+                    this.khoiVideo.volume = audioManager.videoVolume;
+                }
                 this.khoiVideo.classList.remove('hidden-video');
-                this.khoiVideo.play();
+                // Ép thêm style phòng hờ css lỗi
+                this.khoiVideo.style.opacity = '1';
+                this.khoiVideo.style.transform = 'scale(1)';
+                this.khoiVideo.style.pointerEvents = 'all';
+
+                this.khoiVideo.play().catch(e => {
+                    console.log("Video play error:", e);
+                    this.khoiVideo.controls = true; // Hiện nút play thủ công
+                });
             }
         }, 500);
     }

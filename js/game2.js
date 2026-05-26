@@ -36,9 +36,17 @@ class Game2 {
         this.currentIndex = 0;
         this.isTimerRunning = false;
         this.timerInterval = null;
+        this.isTransitioning = false;
 
         this.setupListeners();
         this.buildAdminMenu();
+
+        this.handleKeyDown = (e) => {
+            if (app.currentStage !== 'game2-stage') return;
+            if (e.key === 'ArrowRight') this.nextPerson();
+            if (e.key === 'ArrowLeft') this.prevPerson();
+        };
+        document.addEventListener('keydown', this.handleKeyDown);
     }
 
     setupListeners() {
@@ -78,18 +86,50 @@ class Game2 {
     }
 
     start() {
+        // Nếu game2 đang chạy rồi (ví dụ quay lại từ farewell), không reset lại từ đầu
+        if (this.isRunning) return;
+        this.isRunning = true;
+
         this.currentIndex = 0;
+        this.isTransitioning = false;
+        this.killAllTimers();
         
         this.hideAllStates();
         if (this.introTitle) {
             this.introTitle.classList.remove('hidden');
-            setTimeout(() => {
+            this.introTimeout = setTimeout(() => {
                 this.introTitle.classList.add('hidden');
                 this.startState1Mystery();
             }, 3000);
         } else {
             this.startState1Mystery();
         }
+    }
+
+    // Hàm dọn dẹp mọi bộ đếm ngầm
+    killAllTimers() {
+        if (this.timerInterval) {
+            clearInterval(this.timerInterval);
+            this.timerInterval = null;
+        }
+        if (this.introTimeout) {
+            clearTimeout(this.introTimeout);
+            this.introTimeout = null;
+        }
+    }
+
+    // Reset game2 hoàn toàn (khi rời khỏi game2)
+    reset() {
+        this.killAllTimers();
+        this.isRunning = false;
+        this.isTransitioning = false;
+        this.hideAllStates();
+    }
+
+    startAtLast() {
+        this.currentIndex = this.members.length - 1;
+        this.hideAllStates();
+        this.startState1Mystery();
     }
 
     hideAllStates() {
@@ -100,7 +140,9 @@ class Game2 {
     }
 
     jumpToPerson(index) {
-        clearInterval(this.timerInterval);
+        if (this.isTransitioning || index === this.currentIndex) return;
+        this.isTransitioning = true;
+        this.killAllTimers();
         
         // Smooth transition out
         this.game2Container.style.transition = 'all 0.5s ease';
@@ -114,11 +156,14 @@ class Game2 {
             // Transition back in
             this.game2Container.style.opacity = 1;
             this.game2Container.style.transform = 'scale(1)';
+            setTimeout(() => { this.isTransitioning = false; }, 500);
         }, 500);
     }
 
     nextPerson() {
-        clearInterval(this.timerInterval);
+        if (this.isTransitioning) return;
+        this.isTransitioning = true;
+        this.killAllTimers();
         
         this.game2Container.style.transition = 'all 0.5s ease';
         this.game2Container.style.opacity = 0;
@@ -127,6 +172,7 @@ class Game2 {
         setTimeout(() => {
             this.currentIndex++;
             if (this.currentIndex >= this.members.length) {
+                this.reset();
                 app.goToStage('farewell-stage');
                 return;
             }
@@ -134,6 +180,35 @@ class Game2 {
             
             this.game2Container.style.opacity = 1;
             this.game2Container.style.transform = 'scale(1)';
+            setTimeout(() => { this.isTransitioning = false; }, 500);
+        }, 500);
+    }
+
+    prevPerson() {
+        if (this.isTransitioning) return;
+        this.isTransitioning = true;
+        this.killAllTimers();
+        
+        if (this.currentIndex <= 0) {
+            this.reset();
+            app.goToStage('game1-stage');
+            if (typeof game1 !== 'undefined') {
+                game1.startAtLast();
+            }
+            return;
+        }
+
+        this.game2Container.style.transition = 'all 0.5s ease';
+        this.game2Container.style.opacity = 0;
+        this.game2Container.style.transform = 'scale(0.95)';
+        
+        setTimeout(() => {
+            this.currentIndex--;
+            this.startState1Mystery();
+            
+            this.game2Container.style.opacity = 1;
+            this.game2Container.style.transform = 'scale(1)';
+            setTimeout(() => { this.isTransitioning = false; }, 500);
         }, 500);
     }
 
@@ -160,6 +235,7 @@ class Game2 {
     }
 
     startState2Countdown() {
+        this.killAllTimers(); // Xóa mọi bộ đếm cũ triệt để
         this.countdownNumber.classList.remove('hidden');
         
         let count = 10;
@@ -182,6 +258,7 @@ class Game2 {
     startState3Reveal() {
         this.hideAllStates();
         this.state3Reveal.classList.remove('hidden');
+        this.subImgsContainer.innerHTML = ''; // Đảm bảo clear sạch ảnh phụ để tránh loop chồng chéo
         
         const member = this.members[this.currentIndex];
         

@@ -8,12 +8,12 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;800&family=Great+Vibes&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;800&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     
     <!-- CSS -->
-    <link rel="stylesheet" href="css/main.css?v=12">
-    <link rel="stylesheet" href="css/animations.css?v=3">
-    <link rel="stylesheet" href="css/glory_text.css?v=3">
+    <link rel="stylesheet" href="css/main.css?v=14">
+    <link rel="stylesheet" href="css/animations.css?v=4">
+    <link rel="stylesheet" href="css/glory_text.css?v=4">
 
     <!-- Canvas Confetti -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -31,6 +31,37 @@
         <div id="music-disc" class="music-disc paused"></div>
         <div class="music-info">
             <span id="music-track-name">Nhấn để phát nhạc</span>
+        </div>
+        <button id="btn-audio-settings" class="btn-audio-settings" title="Cài đặt Âm thanh">🎛️</button>
+    </div>
+
+    <!-- Audio Admin Panel -->
+    <div id="audio-admin-panel" class="audio-admin-panel hidden">
+        <div class="audio-panel-header">
+            <h4>Cài đặt Hệ thống Âm thanh</h4>
+            <button id="btn-close-audio-panel" class="btn-close">×</button>
+        </div>
+        <div class="audio-controls">
+            <div class="control-group">
+                <label for="music-vol-slider">Nhạc nền (Background Music)</label>
+                <div class="slider-wrapper">
+                    <span class="vol-icon">🔉</span>
+                    <input type="range" id="music-vol-slider" min="0" max="1" step="0.05" value="1">
+                    <span id="music-vol-val" class="vol-val">100%</span>
+                </div>
+            </div>
+            <div class="control-group">
+                <label for="video-vol-slider">Video Đỗ Khôi</label>
+                <div class="slider-wrapper">
+                    <span class="vol-icon">🎬</span>
+                    <input type="range" id="video-vol-slider" min="0" max="1" step="0.05" value="1">
+                    <span id="video-vol-val" class="vol-val">100%</span>
+                </div>
+            </div>
+        </div>
+        <div class="audio-playlist">
+            <h5>Danh sách Nhạc nền</h5>
+            <div id="audio-playlist-container" class="playlist-container"></div>
         </div>
     </div>
 
@@ -53,6 +84,15 @@
                 <h2 id="game1-question-text">Giơ một ngón tay xuống nếu...</h2>
             </div>
             <p class="instruction-text">Bấm [Click] hoặc phím [Mũi tên phải] để tiếp tục</p>
+
+            <!-- Admin Panel Menu Game 1 -->
+            <div id="game1-admin-panel" class="admin-panel">
+                <button id="btn-toggle-admin-game1" class="btn-admin-toggle">⚙️ Admin</button>
+                <div class="admin-menu">
+                    <h4 style="color:#fff; margin-bottom: 10px; border-bottom: 1px solid #555; padding-bottom: 5px;">Chọn Câu Hỏi</h4>
+                    <div id="game1-admin-list" class="admin-member-list"></div>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -97,7 +137,7 @@
             <!-- Admin Panel Menu -->
             <div id="admin-panel" class="admin-panel">
                 <button id="btn-toggle-admin" class="btn-admin-toggle">⚙️ Admin</button>
-                <div id="admin-menu" class="admin-menu hidden">
+                <div id="admin-menu" class="admin-menu">
                     <h4 style="color:#fff; margin-bottom: 10px; border-bottom: 1px solid #555; padding-bottom: 5px;">Chọn thành viên</h4>
                     <div id="admin-member-list" class="admin-member-list"></div>
                 </div>
@@ -118,13 +158,13 @@
     <audio id="sfx-explosion" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3" preload="auto"></audio>
     <audio id="sfx-netflix" src="https://assets.mixkit.co/active_storage/sfx/1206/1206-preview.mp3" preload="auto"></audio>
 
-    <!-- Scripts -->
-    <script src="js/data.js?v=15"></script>
-    <script src="js/background.js?v=10"></script>
-    <script src="js/audio-manager.js?v=6"></script>
-    <script src="js/game1.js?v=12"></script>
-    <script src="js/game2.js?v=15"></script>
-    <script src="js/farewell.js?v=10"></script>
-    <script src="js/app.js?v=6"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="js/data.js?v=16"></script>
+    <script src="js/background.js?v=11"></script>
+    <script src="js/audio-manager.js?v=7"></script>
+    <script src="js/game1.js?v=13"></script>
+    <script src="js/game2.js?v=19"></script>
+    <script src="js/farewell.js?v=11"></script>
+    <script src="js/app.js?v=7"></script>
 </body>
 </html>
